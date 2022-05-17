@@ -1,0 +1,7 @@
+-- Whats the login flow ?
+I'm using Spring Security. What do I return when the /login endpoint is hit ? Do I return anything ?
+Do I even have to hit the endpoint or let jsession handle it all ??
+
+-- CSRF understanding proper ?
+
+-- why so many /logins in openapi ?
