@@ -1,7 +1,5 @@
--- Whats the login flow ?
 I'm using Spring Security. What do I return when the /login endpoint is hit ? Do I return anything ?
 Do I even have to hit the endpoint or let jsession handle it all ??
-
--- CSRF understanding proper ?
-
+Should I make sessionManagement stateless ? because REST should be stateless.. (doubt(1))
 -- why so many /logins in openapi ?
+store jwt token in localStorage or cookies ?

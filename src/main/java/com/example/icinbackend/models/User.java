@@ -1,9 +1,11 @@
 package com.example.icinbackend.models;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class User implements UserDetails {
     private int id;
@@ -50,7 +52,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
     }
 
     public String getPassword() {
@@ -67,6 +69,11 @@ public class User implements UserDetails {
 
     public void setCust_id(int cust_id) {
         this.cust_id = cust_id;
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
     }
 
     public int getAdmin_id() {

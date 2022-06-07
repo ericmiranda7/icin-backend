@@ -1,8 +1,10 @@
 package com.example.icinbackend.security;
 
+import com.auth0.jwt.JWT;
 import com.example.icinbackend.ApiResponse;
 import com.example.icinbackend.services.MySQLUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,11 +14,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,20 +33,26 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 public class WebSecConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private JWTFilter filter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER) // doubt(1)
+                .and()
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/health").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/v3/api-docs", "/swagger-ui/index.html", "/swagger-ui/**", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui", "/swagger-ui.html").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/balance").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic()
-                .and()
+                .httpBasic().disable()
                 .logout()
                 .and()
                 .exceptionHandling()
@@ -53,7 +63,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json");
                     om.writeValue(out, apiRes);
                     out.flush();
-                });
+                })
+                .and()
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

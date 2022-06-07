@@ -19,8 +19,6 @@ public class MySQLUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userDAO.getOneById(username);
-        System.out.println(user);
-        return user;
+        return this.userDAO.getOneById(username);
     }
 }

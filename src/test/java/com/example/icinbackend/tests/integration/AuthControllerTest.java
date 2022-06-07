@@ -1,6 +1,6 @@
 package com.example.icinbackend.tests.integration;
 
-import com.example.icinbackend.controllers.AuthController;
+import com.example.icinbackend.DAO.controllers.AuthController;
 import com.example.icinbackend.models.User;
 import com.example.icinbackend.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
